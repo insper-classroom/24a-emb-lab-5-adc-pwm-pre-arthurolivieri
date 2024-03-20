@@ -24,12 +24,33 @@ void data_task(void *p) {
 }
 
 void process_task(void *p) {
-    int data = 0;
+    const int windowSize = 5; // Tamanho da janela para a média móvel
+    int window[5] = {0}; // Inicializa a janela com 0
+    int windowSum = 0; // Soma dos valores na janela
+    int dataIndex = 0; // Índice atual na janela
+    int dataCount = 0; // Contador de dados recebidos (para inicialização)
+    int data = 0; // Dado recebido da fila
 
     while (true) {
         if (xQueueReceive(xQueueData, &data, 100)) {
             // implementar filtro aqui!
 
+            // Subtrai o valor antigo e adiciona o novo valor
+            windowSum -= window[dataIndex];
+            window[dataIndex] = data;
+            windowSum += data;
+
+            // Incrementa o contador de dados até que a janela esteja cheia
+            dataCount = dataCount < windowSize ? dataCount + 1 : windowSize;
+
+            // Calcula a média móvel
+            int movingAverage = windowSum / dataCount;
+
+            // Imprime o dado filtrado
+            printf("%d\n", movingAverage);
+
+            // Avança o índice da janela circularmente
+            dataIndex = (dataIndex + 1) % windowSize;
 
 
 
