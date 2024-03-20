@@ -25,7 +25,7 @@ void data_task(void *p) {
 
 void process_task(void *p) {
     const int windowSize = 5; // Tamanho da janela para a média móvel
-    int window[5] = {0}; // Inicializa a janela com 0
+    int window[5] = {0,0,0,0,0}; // Inicializa a janela com 0
     int windowSum = 0; // Soma dos valores na janela
     int dataIndex = 0; // Índice atual na janela
     int dataCount = 0; // Contador de dados recebidos (para inicialização)
@@ -40,11 +40,8 @@ void process_task(void *p) {
             window[dataIndex] = data;
             windowSum += data;
 
-            // Incrementa o contador de dados até que a janela esteja cheia
-            dataCount = dataCount < windowSize ? dataCount + 1 : windowSize;
-
             // Calcula a média móvel
-            int movingAverage = windowSum / dataCount;
+            int movingAverage = windowSum / windowSize;
 
             // Imprime o dado filtrado
             printf("%d\n", movingAverage);
